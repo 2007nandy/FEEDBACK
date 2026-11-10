@@ -1,2 +1,2 @@
 live link 
-https://feedback-app-gules-psi.vercel.app
+https://feedback-app-gules-psi.vercel.app/
