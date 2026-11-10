@@ -1,16 +1,40 @@
-.container {
-  max-width: 400px;
-  margin: 40px auto;
-  padding: 20px;
-  border: 2px solid #ccc;
-  border-radius: 10px;
-  box-shadow: 2px 2px 12px #aaa;
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
   font-family: Arial, sans-serif;
+  background-color: #f4f6f9;
+  color: #333;
+}
+
+.page {
+  padding: 30px 15px;
+}
+
+.container {
+  max-width: 550px;
+  margin: 0 auto 35px;
+  padding: 25px 30px;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
 }
 
 h1 {
   text-align: center;
   color: #333;
+  margin: 0 0 8px;
+}
+
+.subtitle {
+  text-align: center;
+  color: #777;
+  font-size: 14px;
+  margin-bottom: 22px;
 }
 
 .feedback-form {
@@ -19,27 +43,104 @@ h1 {
 }
 
 label {
-  margin-top: 10px;
+  margin-top: 13px;
+  margin-bottom: 5px;
   font-weight: bold;
+  font-size: 14px;
 }
 
-input {
-  margin-top: 5px;
-  padding: 8px;
-  border: 1px solid #999;
+input,
+textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #bbb;
   border-radius: 5px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  outline: none;
+}
+
+input:focus,
+textarea:focus {
+  border-color: #0078d7;
+}
+
+textarea {
+  min-height: 75px;
+  resize: vertical;
 }
 
 button {
-  margin-top: 20px;
-  padding: 10px;
+  margin-top: 22px;
+  padding: 12px;
   background-color: #0078d7;
   color: white;
   border: none;
   border-radius: 5px;
+  font-size: 15px;
+  font-weight: bold;
   cursor: pointer;
 }
 
 button:hover {
   background-color: #005fa3;
+}
+
+.feedback-list {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+}
+
+.feedback-list h2 {
+  text-align: center;
+  margin-top: 5px;
+  margin-bottom: 20px;
+}
+
+.empty-message {
+  text-align: center;
+  color: #777;
+}
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 750px;
+}
+
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: left;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+th {
+  background-color: #0078d7;
+  color: white;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f5f7fa;
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 20px;
+  }
+
+  .feedback-list {
+    padding: 12px;
+  }
 }
