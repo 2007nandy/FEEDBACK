@@ -27,7 +27,7 @@ body {
 h1 {
   text-align: center;
   color: #333;
-  margin-bottom: 8px;
+  margin: 0 0 8px;
 }
 
 .subtitle {
@@ -57,12 +57,12 @@ textarea {
   border-radius: 5px;
   font-family: Arial, sans-serif;
   font-size: 14px;
+  outline: none;
 }
 
 input:focus,
 textarea:focus {
   border-color: #0078d7;
-  outline: none;
 }
 
 textarea {
@@ -71,29 +71,19 @@ textarea {
 }
 
 button {
-  cursor: pointer;
-  border: none;
-  border-radius: 5px;
-  font-weight: bold;
-}
-
-.submit-btn {
   margin-top: 22px;
   padding: 12px;
   background-color: #0078d7;
   color: white;
+  border: none;
+  border-radius: 5px;
   font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
 }
 
-.submit-btn:hover {
+button:hover {
   background-color: #005fa3;
-}
-
-.cancel-btn {
-  margin-top: 10px;
-  padding: 11px;
-  background-color: #6c757d;
-  color: white;
 }
 
 .feedback-list {
@@ -107,6 +97,7 @@ button {
 
 .feedback-list h2 {
   text-align: center;
+  margin-top: 5px;
   margin-bottom: 20px;
 }
 
@@ -122,8 +113,8 @@ button {
 
 table {
   width: 100%;
-  min-width: 900px;
   border-collapse: collapse;
+  min-width: 750px;
 }
 
 th,
@@ -142,41 +133,6 @@ th {
 
 tbody tr:nth-child(even) {
   background-color: #f5f7fa;
-}
-
-/* Actions column */
-
-.action-buttons {
-  white-space: nowrap;
-  min-width: 150px;
-}
-
-.action-buttons button {
-  padding: 8px 12px;
-  margin: 3px;
-  font-size: 13px;
-  color: white;
-}
-
-.edit-btn {
-  background-color: #198754;
-}
-
-.edit-btn:hover {
-  background-color: #146c43;
-}
-
-.delete-btn {
-  background-color: #dc3545;
-}
-
-.delete-btn:hover {
-  background-color: #bb2d3b;
-}
-
-.delete-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
 }
 
 @media (max-width: 600px) {
