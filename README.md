@@ -1,2 +1,2 @@
-live link 
+feednack form live link 
 https://feedback-app-gules-psi.vercel.app/
