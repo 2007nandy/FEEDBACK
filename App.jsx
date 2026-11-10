@@ -3,19 +3,21 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./App.css";
 
-// Replace this with your actual Render backend URL
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 function App() {
-  const [feedback, setFeedback] = useState({
+  const emptyFeedback = {
     q1: "",
     q2: "",
     q3: "",
     q4: "",
     q5: "",
-  });
+  };
 
+  const [feedback, setFeedback] = useState(emptyFeedback);
   const [feedbacks, setFeedbacks] = useState([]);
+  const [editingId, setEditingId] = useState(null);
 
   const getFeedbacks = async () => {
     try {
@@ -43,26 +45,80 @@ function App() {
     e.preventDefault();
 
     try {
-      await axios.post(
-        `${API_URL}/api/feedback`,
-        feedback
-      );
+      if (editingId) {
+        await axios.put(
+          `${API_URL}/api/feedback/${editingId}`,
+          feedback
+        );
 
-      alert("Feedback submitted successfully!");
+        alert("Feedback updated successfully!");
+        setEditingId(null);
+      } else {
+        await axios.post(
+          `${API_URL}/api/feedback`,
+          feedback
+        );
 
-      setFeedback({
-        q1: "",
-        q2: "",
-        q3: "",
-        q4: "",
-        q5: "",
-      });
+        alert("Feedback submitted successfully!");
+      }
 
-      getFeedbacks();
+      setFeedback(emptyFeedback);
+      await getFeedbacks();
 
     } catch (error) {
-      console.error("Error submitting feedback:", error);
-      alert("Failed to submit feedback.");
+      console.error("Error saving feedback:", error);
+      alert("Failed to save feedback.");
+    }
+  };
+
+  // Edit feedback
+  const handleEdit = (item) => {
+    setFeedback({
+      q1: item.q1 || "",
+      q2: item.q2 || "",
+      q3: item.q3 || "",
+      q4: item.q4 || "",
+      q5: item.q5 || "",
+    });
+
+    setEditingId(item._id);
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+  // Cancel editing
+  const handleCancel = () => {
+    setFeedback(emptyFeedback);
+    setEditingId(null);
+  };
+
+  // Delete feedback
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this feedback?"
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+      await axios.delete(
+        `${API_URL}/api/feedback/${id}`
+      );
+
+      alert("Feedback deleted successfully!");
+
+      if (editingId === id) {
+        handleCancel();
+      }
+
+      await getFeedbacks();
+
+    } catch (error) {
+      console.error("Error deleting feedback:", error);
+      alert("Failed to delete feedback.");
     }
   };
 
@@ -72,6 +128,7 @@ function App() {
       <div className="container">
 
         <h1>Feedback Form</h1>
+
         <p className="subtitle">
           Share your valuable feedback and suggestions
         </p>
@@ -82,7 +139,6 @@ function App() {
           <input
             type="text"
             name="q1"
-            placeholder="Enter your name"
             value={feedback.q1}
             onChange={handleChange}
             required
@@ -92,7 +148,6 @@ function App() {
           <input
             type="text"
             name="q2"
-            placeholder="Enter your department"
             value={feedback.q2}
             onChange={handleChange}
             required
@@ -102,7 +157,6 @@ function App() {
           <input
             type="text"
             name="q3"
-            placeholder="Enter session title"
             value={feedback.q3}
             onChange={handleChange}
             required
@@ -111,7 +165,6 @@ function App() {
           <label>Feedback:</label>
           <textarea
             name="q4"
-            placeholder="Write your feedback"
             value={feedback.q4}
             onChange={handleChange}
             required
@@ -120,17 +173,25 @@ function App() {
           <label>Suggestions:</label>
           <textarea
             name="q5"
-            placeholder="Enter your suggestions"
             value={feedback.q5}
             onChange={handleChange}
           />
 
           <button type="submit">
-            Submit Feedback
+            {editingId ? "Update Feedback" : "Submit Feedback"}
           </button>
 
-        </form>
+          {editingId && (
+            <button
+              type="button"
+              className="cancel-btn"
+              onClick={handleCancel}
+            >
+              Cancel Edit
+            </button>
+          )}
 
+        </form>
       </div>
 
       <div className="feedback-list">
@@ -154,6 +215,7 @@ function App() {
                   <th>Session Title</th>
                   <th>Feedback</th>
                   <th>Suggestions</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
 
@@ -166,6 +228,22 @@ function App() {
                     <td>{item.q3}</td>
                     <td>{item.q4}</td>
                     <td>{item.q5}</td>
+
+                    <td className="action-buttons">
+                      <button
+                        className="edit-btn"
+                        onClick={() => handleEdit(item)}
+                      >
+                        Edit
+                      </button>
+
+                      <button
+                        className="delete-btn"
+                        onClick={() => handleDelete(item._id)}
+                      >
+                        Delete
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -175,7 +253,6 @@ function App() {
         )}
 
       </div>
-
     </div>
   );
 }
