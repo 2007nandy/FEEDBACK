@@ -1,6 +1,10 @@
+
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./App.css";
+
+// Replace this with your actual Render backend URL
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 function App() {
   const [feedback, setFeedback] = useState({
@@ -13,20 +17,17 @@ function App() {
 
   const [feedbacks, setFeedbacks] = useState([]);
 
-  // Get feedbacks from backend
   const getFeedbacks = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/feedback"
+        `${API_URL}/api/feedback`
       );
-
       setFeedbacks(response.data);
     } catch (error) {
       console.error("Error getting feedback:", error);
     }
   };
 
-  // Load feedbacks when page opens
   useEffect(() => {
     getFeedbacks();
   }, []);
@@ -43,7 +44,7 @@ function App() {
 
     try {
       await axios.post(
-        "http://localhost:5000/api/feedback",
+        `${API_URL}/api/feedback`,
         feedback
       );
 
@@ -57,7 +58,6 @@ function App() {
         q5: "",
       });
 
-      // Refresh feedback list
       getFeedbacks();
 
     } catch (error) {
@@ -67,99 +67,111 @@ function App() {
   };
 
   return (
-    <div className="container">
+    <div className="page">
 
-      <h1>Feedback Form</h1>
+      <div className="container">
 
-      <form
-        onSubmit={handleSubmit}
-        className="feedback-form"
-      >
+        <h1>Feedback Form</h1>
+        <p className="subtitle">
+          Share your valuable feedback and suggestions
+        </p>
 
-        <label>Name:</label>
-        <input
-          type="text"
-          name="q1"
-          value={feedback.q1}
-          onChange={handleChange}
-          required
-        />
+        <form onSubmit={handleSubmit} className="feedback-form">
 
-        <label>Department:</label>
-        <input
-          type="text"
-          name="q2"
-          value={feedback.q2}
-          onChange={handleChange}
-          required
-        />
+          <label>Name:</label>
+          <input
+            type="text"
+            name="q1"
+            placeholder="Enter your name"
+            value={feedback.q1}
+            onChange={handleChange}
+            required
+          />
 
-        <label>Session Title:</label>
-        <input
-          type="text"
-          name="q3"
-          value={feedback.q3}
-          onChange={handleChange}
-          required
-        />
+          <label>Department:</label>
+          <input
+            type="text"
+            name="q2"
+            placeholder="Enter your department"
+            value={feedback.q2}
+            onChange={handleChange}
+            required
+          />
 
-        <label>Feedback:</label>
-        <input
-          type="text"
-          name="q4"
-          value={feedback.q4}
-          onChange={handleChange}
-          required
-        />
+          <label>Session Title:</label>
+          <input
+            type="text"
+            name="q3"
+            placeholder="Enter session title"
+            value={feedback.q3}
+            onChange={handleChange}
+            required
+          />
 
-        <label>Suggestions:</label>
-        <input
-          type="text"
-          name="q5"
-          value={feedback.q5}
-          onChange={handleChange}
-        />
+          <label>Feedback:</label>
+          <textarea
+            name="q4"
+            placeholder="Write your feedback"
+            value={feedback.q4}
+            onChange={handleChange}
+            required
+          />
 
-        <button type="submit">
-          Submit
-        </button>
+          <label>Suggestions:</label>
+          <textarea
+            name="q5"
+            placeholder="Enter your suggestions"
+            value={feedback.q5}
+            onChange={handleChange}
+          />
 
-      </form>
+          <button type="submit">
+            Submit Feedback
+          </button>
 
-      {/* Feedback Display */}
+        </form>
+
+      </div>
 
       <div className="feedback-list">
 
         <h2>Submitted Feedback</h2>
 
         {feedbacks.length === 0 ? (
-          <p>No feedback submitted yet.</p>
+          <p className="empty-message">
+            No feedback submitted yet.
+          </p>
         ) : (
-          feedbacks.map((item, index) => (
-            <div className="feedback-card" key={index}>
 
-              <p>
-                <strong>Name:</strong> {item.q1}
-              </p>
+          <div className="table-container">
 
-              <p>
-                <strong>Department:</strong> {item.q2}
-              </p>
+            <table>
+              <thead>
+                <tr>
+                  <th>S.No</th>
+                  <th>Name</th>
+                  <th>Department</th>
+                  <th>Session Title</th>
+                  <th>Feedback</th>
+                  <th>Suggestions</th>
+                </tr>
+              </thead>
 
-              <p>
-                <strong>Session Title:</strong> {item.q3}
-              </p>
+              <tbody>
+                {feedbacks.map((item, index) => (
+                  <tr key={item._id || index}>
+                    <td>{index + 1}</td>
+                    <td>{item.q1}</td>
+                    <td>{item.q2}</td>
+                    <td>{item.q3}</td>
+                    <td>{item.q4}</td>
+                    <td>{item.q5}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
 
-              <p>
-                <strong>Feedback:</strong> {item.q4}
-              </p>
-
-              <p>
-                <strong>Suggestions:</strong> {item.q5}
-              </p>
-
-            </div>
-          ))
+          </div>
         )}
 
       </div>
