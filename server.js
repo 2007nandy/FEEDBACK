@@ -1,8 +1,10 @@
+
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 
 const app = express();
+
 const PORT = process.env.PORT || 5000;
 
 app.use(cors());
@@ -17,9 +19,9 @@ app.get("/", (req, res) => {
 app.get("/api/feedback", (req, res) => {
   res.json(feedbacks);
 });
+
 app.post("/api/feedback", (req, res) => {
   const feedbackData = req.body;
-
   feedbacks.push(feedbackData);
 
   console.log("Received Feedback:", feedbackData);
@@ -31,5 +33,5 @@ app.post("/api/feedback", (req, res) => {
 });
 
 app.listen(PORT, "0.0.0.0", () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
